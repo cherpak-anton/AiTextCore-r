@@ -1,0 +1,21 @@
+{
+  "site.brand": "AiTextCore",
+  "tool.hideLeft": "Hide the panel",
+  "tool.hideRight": "Hide the panel",
+  "book.project": "Personal cabinet",
+  "site.search": "Search books",
+  "site.library": "Library",
+  "book.cabinet": "Cabinet",
+  "book.translate": "Translation of the text",
+  "book.menu": "Book menu",
+  "lang.choose": "Choose language",
+  "book.discussion": "Discussion",
+  "book.reader": "Reader",
+  "book.history": "History and drafts",
+  "book.ai": "Connect AI",
+  "site.notifications": "Notifications",
+  "site.user": "User menu",
+  "book.tocLabel": "Table of contents",
+  "book.discussionLabel": "Discussion",
+  "book.help": "Help"
+}

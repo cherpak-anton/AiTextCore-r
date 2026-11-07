@@ -1,0 +1,21 @@
+{
+  "site.brand": "AiTextCore",
+  "tool.hideLeft": "Скрыть панель",
+  "tool.hideRight": "Скрыть панель",
+  "book.project": "Личный кабинет",
+  "site.search": "Поиск книг",
+  "site.library": "Библиотека",
+  "book.cabinet": "Кабинет",
+  "book.translate": "Перевод текста",
+  "book.menu": "Меню книги",
+  "lang.choose": "Выбрать язык",
+  "book.discussion": "Обсуждение",
+  "book.reader": "Читалка",
+  "book.history": "История и черновики",
+  "book.ai": "Подключить ИИ",
+  "site.notifications": "Уведомления",
+  "site.user": "Меню пользователя",
+  "book.tocLabel": "Оглавление",
+  "book.discussionLabel": "Обсуждение",
+  "book.help": "Справка"
+}
