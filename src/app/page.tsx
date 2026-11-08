@@ -39,6 +39,7 @@ export default async function Home() {
     <SiteFrame
       path={PAGE_PATH}
       locale={locale}
+      withCore={false}
       headerStart={
         <>
           <Typography

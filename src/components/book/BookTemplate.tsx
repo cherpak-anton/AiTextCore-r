@@ -1,83 +1,62 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
+import type { ReactNode } from "react";
+import { type CatalogItem, ToolVisible } from "@/components/shell/ToolVisibility";
 import { SiteFrame } from "@/components/site/SiteFrame";
 import { ToolButton, type Tool } from "@/components/site/Tool";
 import type { Locale } from "@/lib/locale";
 
-// Шаблон страницы книги: шапка в трёх зонах, левая панель (оглавление), правая панель (обсуждение).
-// Инструменты передаёт страница списками. Заголовки панелей — часть структуры шаблона.
+// Шаблон страницы книги: одно окно — шапка, левая и правая панели. Постоянные инструменты окна
+// добавляет SiteFrame; здесь — инструменты страницы, виды панелей и языки.
 type BookTemplateProps = {
   locale: Locale;
-  // Адрес страницы: по нему берутся её тексты из базы.
+  // Адрес страницы: по нему берутся её тексты и её настройки инструментов.
   path?: string;
+  // Языки, для которых есть тексты (для переключателя языка).
+  readyLocales?: string[];
   headerStart?: Tool[];
   headerCenter?: Tool[];
   headerEnd?: Tool[];
-  leftTools?: Tool[];
-  rightTools?: Tool[];
+  // Виды панелей. Без них панели пустые.
+  leftViews?: Record<string, ReactNode>;
+  rightViews?: Record<string, ReactNode>;
 };
+
+// Инструменты страницы: каждый виден по умолчанию или по выбору пользователя.
+function renderTools(tools: Tool[], scope: string) {
+  return tools.map((tool) => (
+    <ToolVisible key={tool.id} scope={scope} id={tool.id} defaultVisible={tool.defaultVisible ?? true}>
+      <ToolButton tool={tool} />
+    </ToolVisible>
+  ));
+}
+
+// Каталог инструментов страницы для настроек: всё, что страница может показать.
+function catalogOf(tools: Tool[]): CatalogItem[] {
+  return tools.map((tool) => ({ id: tool.id, textId: tool.textId, defaultVisible: tool.defaultVisible ?? true }));
+}
 
 export function BookTemplate({
   locale,
   path = "/template/book",
+  readyLocales = [],
   headerStart = [],
   headerCenter = [],
   headerEnd = [],
-  leftTools = [],
-  rightTools = [],
+  leftViews = { toc: null },
+  rightViews = { discussion: null },
 }: BookTemplateProps) {
+  const pageTools = [...headerStart, ...headerCenter, ...headerEnd];
+
   return (
     <SiteFrame
       path={path}
       locale={locale}
-      headerStart={headerStart.map((tool) => (
-        <ToolButton key={tool.id} tool={tool} />
-      ))}
-      headerCenter={headerCenter.map((tool) => (
-        <ToolButton key={tool.id} tool={tool} />
-      ))}
-      headerEnd={headerEnd.map((tool) => (
-        <ToolButton key={tool.id} tool={tool} />
-      ))}
-      leftPanel={{
-        labelTextId: "book.tocLabel",
-        content: (
-          <Stack spacing={1}>
-            <Typography
-              data-text="book.tocLabel"
-              sx={{
-                fontSize: "0.85rem",
-                fontWeight: 700,
-                letterSpacing: "0.04em",
-                textTransform: "uppercase",
-                color: "text.secondary",
-              }}
-            />
-            {leftTools.map((tool) => (
-              <ToolButton key={tool.id} tool={tool} />
-            ))}
-          </Stack>
-        ),
-      }}
-      rightPanel={{
-        labelTextId: "book.discussionLabel",
-        content: (
-          <Stack spacing={1}>
-            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
-              <Typography data-text="book.discussionLabel" sx={{ fontSize: "0.95rem" }} />
-              <Button type="button" color="inherit" data-text-aria="book.help" sx={{ minWidth: 0, px: 0.75, fontSize: "0.8rem" }}>
-                ?
-              </Button>
-            </Stack>
-            <Box sx={{ borderTop: 1, borderColor: "divider" }} />
-            {rightTools.map((tool) => (
-              <ToolButton key={tool.id} tool={tool} />
-            ))}
-          </Stack>
-        ),
-      }}
+      readyLocales={readyLocales}
+      pageCatalog={catalogOf(pageTools)}
+      headerStart={renderTools(headerStart, path)}
+      headerCenter={renderTools(headerCenter, path)}
+      headerEnd={renderTools(headerEnd, path)}
+      leftPanel={{ labelTextId: "book.tocLabel", views: leftViews }}
+      rightPanel={{ labelTextId: "book.discussionLabel", views: rightViews }}
     >
       {null}
     </SiteFrame>

@@ -6,5 +6,16 @@
   "lang.choose": "Выбрать язык",
   "lang.search": "Поиск языка",
   "lang.ready": "✓ Готово",
-  "lang.soon": "✨ Перевод скоро"
+  "lang.soon": "✨ Перевод скоро",
+  "site.brand": "AiTextCore",
+  "site.project": "Личный кабинет",
+  "site.search": "Поиск по книгам…",
+  "site.discussion": "Обсуждение",
+  "site.reader": "Чтение вслух",
+  "site.ai": "ИИ",
+  "site.notifications": "Уведомления",
+  "site.user": "Меню пользователя",
+  "tool.hideLeft": "Скрыть левую панель",
+  "tool.hideRight": "Скрыть правую панель",
+  "site.settings": "Настройка инструментов"
 }

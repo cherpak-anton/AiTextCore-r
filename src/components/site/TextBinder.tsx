@@ -33,12 +33,35 @@ function loadTexts(path: string, locale: string): Promise<TextMap> {
   return request;
 }
 
-// Раскладывает тексты страницы по элементам:
-// data-text="id" — текст, data-text-aria="id" — aria-label, data-text-placeholder="id" — placeholder.
-// Сами элементы в HTML пустые: текст приходит из базы через /api/texts.
+// Раскладывает тексты по элементам: data-text — текст, data-text-aria — aria-label,
+// data-text-placeholder — placeholder. Меняет только то, что отличается, — иначе зациклится на собственных правках.
+function applyTexts(texts: TextMap) {
+  document.querySelectorAll<HTMLElement>("[data-text]").forEach((element) => {
+    const value = texts[element.dataset.text ?? ""];
+    if (value !== undefined && element.textContent !== value) {
+      element.textContent = value;
+    }
+  });
+  document.querySelectorAll<HTMLElement>("[data-text-aria]").forEach((element) => {
+    const value = texts[element.dataset.textAria ?? ""];
+    if (value !== undefined && element.getAttribute("aria-label") !== value) {
+      element.setAttribute("aria-label", value);
+    }
+  });
+  document.querySelectorAll<HTMLInputElement>("[data-text-placeholder]").forEach((element) => {
+    const value = texts[element.dataset.textPlaceholder ?? ""];
+    if (value !== undefined && element.placeholder !== value) {
+      element.placeholder = value;
+    }
+  });
+}
+
+// Раскладывает тексты страницы по элементам. Сами элементы в HTML пустые: текст приходит из базы через /api/texts.
+// Виды панелей появляются по действиям пользователя, поэтому скрипт следит за новыми элементами и заполняет их.
 export function TextBinder({ path, locale }: TextBinderProps) {
   useEffect(() => {
     let cancelled = false;
+    let observer: MutationObserver | null = null;
 
     document.documentElement.lang = locale;
 
@@ -47,24 +70,9 @@ export function TextBinder({ path, locale }: TextBinderProps) {
         if (cancelled) {
           return;
         }
-        document.querySelectorAll<HTMLElement>("[data-text]").forEach((element) => {
-          const value = texts[element.dataset.text ?? ""];
-          if (value !== undefined) {
-            element.textContent = value;
-          }
-        });
-        document.querySelectorAll<HTMLElement>("[data-text-aria]").forEach((element) => {
-          const value = texts[element.dataset.textAria ?? ""];
-          if (value !== undefined) {
-            element.setAttribute("aria-label", value);
-          }
-        });
-        document.querySelectorAll<HTMLInputElement>("[data-text-placeholder]").forEach((element) => {
-          const value = texts[element.dataset.textPlaceholder ?? ""];
-          if (value !== undefined) {
-            element.placeholder = value;
-          }
-        });
+        applyTexts(texts);
+        observer = new MutationObserver(() => applyTexts(texts));
+        observer.observe(document.body, { childList: true, subtree: true });
       })
       .catch((error: unknown) => {
         console.error(error);
@@ -72,6 +80,7 @@ export function TextBinder({ path, locale }: TextBinderProps) {
 
     return () => {
       cancelled = true;
+      observer?.disconnect();
     };
   }, [path, locale]);
 

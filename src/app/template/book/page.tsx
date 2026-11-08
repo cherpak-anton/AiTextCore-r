@@ -1,15 +1,11 @@
 import { BookTemplate } from "@/components/book/BookTemplate";
-import { HEADER_CENTER, HEADER_END, HEADER_START } from "@/components/book/exampleTools";
 import { getUiLocale } from "@/lib/locale";
+import { getReadyLocales } from "@/lib/texts";
 
-// Шаблон страницы книги: /template/book
+// Шаблон окна книги: постоянные инструменты окна и пустые зоны для инструментов страницы.
 export default async function BookTemplatePage() {
-  return (
-    <BookTemplate
-      locale={await getUiLocale()}
-      headerStart={HEADER_START}
-      headerCenter={HEADER_CENTER}
-      headerEnd={HEADER_END}
-    />
-  );
+  const locale = await getUiLocale();
+  const readyLocales = await getReadyLocales();
+
+  return <BookTemplate locale={locale} readyLocales={readyLocales} />;
 }

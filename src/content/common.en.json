@@ -6,5 +6,16 @@
   "lang.choose": "Choose language",
   "lang.search": "Search language",
   "lang.ready": "✓ Available",
-  "lang.soon": "✨ Translation coming soon"
+  "lang.soon": "✨ Translation coming soon",
+  "site.brand": "AiTextCore",
+  "site.project": "Personal cabinet",
+  "site.search": "Search books…",
+  "site.discussion": "Discussion",
+  "site.reader": "Read aloud",
+  "site.ai": "AI",
+  "site.notifications": "Notifications",
+  "site.user": "User menu",
+  "tool.hideLeft": "Hide the left panel",
+  "tool.hideRight": "Hide the right panel",
+  "site.settings": "Tool settings"
 }
